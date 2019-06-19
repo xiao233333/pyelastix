@@ -431,10 +431,6 @@ def register(im1, im2, params, exact_params=False, verbose=1):
         produced by the Elastix executable. Note that error messages
         produced by Elastix will be printed regardless of the verbose
         level.
-    
-    If `im1` is a list of images, performs a groupwise registration.
-    In this case the resulting `field` is a list of fields, each
-    indicating the deformation to the "average" image.
     """
     
     # Clear dir
@@ -498,9 +494,9 @@ def register(im1, im2, params, exact_params=False, verbose=1):
     if True:
         
         # Compile command to execute
-        command = [get_elastix_exes()[0],
-                   '-m', path_im1, '-f', path_im2, 
-                   '-out', tempdir, '-p', path_params]
+        command = str(get_elastix_exes()[0])+' -m '+str(path_im1)+' -f '+str(path_im2)+' -out '+str(tempdir)+' -p '+str(path_params)
+
+
         if verbose:
             print("Calling Elastix to register images ...")
         _system3(command, verbose)
@@ -516,8 +512,7 @@ def register(im1, im2, params, exact_params=False, verbose=1):
     if True:
         
         # Compile command to execute
-        command = [get_elastix_exes()[1],
-                   '-def', 'all', '-out', tempdir, '-tp', path_trafo_params]
+        command = '{} -def all -out {} -tp {}'.format(get_elastix_exes()[1], tempdir, path_trafo_params)
         _system3(command, verbose)
         
         # Try and load result
@@ -1011,3 +1006,4 @@ def _write_parameter_file(params):
     
     # Done
     return path
+
